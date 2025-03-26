@@ -5,6 +5,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool, DirectoryReadTool, FileReadTool
 #from langchain_anthropic import ChatAnthropic  # Import Anthropic's chat model
 
+
+
 @CrewBase
 class DevTeamCrew:
     """Development Team Crew for software projects"""
@@ -16,8 +18,15 @@ class DevTeamCrew:
     anthropic_llm = LLM(
         model="anthropic/claude-3-haiku-20240307",  # Note the 'anthropic/' prefix
         api_key=os.environ.get("ANTHROPIC_API_KEY"),
-        temperature=0.7
+        temperature=0.7,
+        max_tokens=1000  # Limit response tokens
     )
+
+    # Then when initializing tools for your agents
+    serper_api_key = os.environ.get("SERPER_API_KEY")
+    print(f"Using Serper API key: {serper_api_key[:5]}...") # Print first 5 chars for verification
+
+    search_tool = SerperDevTool(api_key=serper_api_key)
     
     @agent
     def tech_lead(self) -> Agent:
@@ -27,7 +36,7 @@ class DevTeamCrew:
             goal=self.agents_config["tech_lead"]["goal"],
             backstory=self.agents_config["tech_lead"]["backstory"],
             verbose=True,
-            tools=[SerperDevTool(), DirectoryReadTool(), FileReadTool()],
+            tools=[self.search_tool, DirectoryReadTool(), FileReadTool()],
             llm=self.anthropic_llm  # Use Anthropic's Claude
         )
     
@@ -39,7 +48,7 @@ class DevTeamCrew:
             goal=self.agents_config["frontend_dev"]["goal"],
             backstory=self.agents_config["frontend_dev"]["backstory"],
             verbose=True,
-            tools=[SerperDevTool(), FileReadTool()],
+            tools=[self.search_tool, FileReadTool()],
             llm=self.anthropic_llm  # Use Anthropic's Claude
         )
     
@@ -51,7 +60,7 @@ class DevTeamCrew:
             goal=self.agents_config["backend_dev"]["goal"],
             backstory=self.agents_config["backend_dev"]["backstory"],
             verbose=True,
-            tools=[SerperDevTool(), FileReadTool()],
+            tools=[self.search_tool, FileReadTool()],
             llm=self.anthropic_llm  # Use Anthropic's Claude
         )
     
@@ -75,7 +84,7 @@ class DevTeamCrew:
             goal=self.agents_config["devops_engineer"]["goal"],
             backstory=self.agents_config["devops_engineer"]["backstory"],
             verbose=True,
-            tools=[SerperDevTool(), FileReadTool()],
+            tools=[self.search_tool, FileReadTool()],
             llm=self.anthropic_llm  # Use Anthropic's Claude
         )
     
