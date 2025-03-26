@@ -1,0 +1,57 @@
+# src/dev_team_crew/config/tasks.yaml
+architecture_design:
+  description: >
+    Design the system architecture for our task management app based on these requirements:
+    - User authentication (signup, login, password reset)
+    - Task creation, editing, and deletion
+    - Task categorization and prioritization
+    - Deadline setting with notifications
+    - Team collaboration features
+    - Responsive design for mobile and desktop
+    - Analytics dashboard for productivity metrics
+    
+    Include database schema, API endpoints, and component structure.
+  agent: tech_lead
+  expected_output: "A comprehensive architecture document with diagrams, database schema, and API specifications"
+  output_file: "architecture_design.md"
+
+frontend_implementation:
+  description: >
+    Create the frontend implementation plan and React component structure based on the architecture design
+  agent: frontend_dev
+  expected_output: "Detailed frontend implementation plan with component hierarchy, state management approach, and responsive design considerations"
+  context:
+    - architecture_design
+  output_file: "frontend_implementation.md"
+
+backend_implementation:
+  description: >
+    Design the backend implementation with detailed API specifications and database models based on the architecture
+  agent: backend_dev
+  expected_output: "Comprehensive backend implementation plan including API routes, middleware, database models, and security considerations"
+  context:
+    - architecture_design
+  output_file: "backend_implementation.md"
+
+test_plan:
+  description: >
+    Create a comprehensive test plan covering unit, integration, and end-to-end tests for the application
+  agent: qa_engineer
+  expected_output: "Detailed test plan document with test cases, testing strategies, and quality metrics"
+  context:
+    - architecture_design
+    - frontend_implementation
+    - backend_implementation
+  output_file: "test_plan.md"
+
+deployment_plan:
+  description: >
+    Design the CI/CD pipeline and infrastructure setup for the application
+  agent: devops_engineer
+  expected_output: "Complete deployment strategy with CI/CD pipeline configuration, infrastructure-as-code, and monitoring setup"
+  context:
+    - architecture_design
+    - frontend_implementation
+    - backend_implementation
+    - test_plan
+  output_file: "deployment_plan.md"
